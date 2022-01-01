@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - Flaskr</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style2.css')}}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Raleway&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h3 class="welcome">Welcome to Flaskr</h3>
+    <div class="account-box">
+        <div class="account-wrapper">
+            <div class="account-logo">
+                <a href="{{url_for('blog.index')}}">Flaskr</a>
+            </div>
+            <div class="content">
+                {% for message in get_flashed_messages() %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
