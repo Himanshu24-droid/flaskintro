@@ -6,3 +6,4 @@ build/
 .idea/
 instance/
 venv/
+flaskr/__pycache__/
