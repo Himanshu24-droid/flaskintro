@@ -1,8 +1,8 @@
 MANIFEST.in
 setup.py
-/flaskr.egg-info
-/dist
-/build
-/.idea
-/instance
-/venv
+flaskr.egg-info/
+dist/
+build/
+.idea/
+instance/
+venv/
