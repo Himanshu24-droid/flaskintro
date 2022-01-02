@@ -7,7 +7,7 @@ body {font-family: 'Montserrat','Times New Roman', sans-serif, serif;font-size: 
 .account-box .btn {background: linear-gradient(to right, #ff9b44 0%, #fc6075 100%);border-radius: 0;font-size: 22px;padding: 10px 26px;box-shadow: 0 6px 15px rgba(255, 155, 68, 0.6);border:0;color: white;width: 100%;-webkit-appearance: button;cursor: pointer;}
 .account-box .btn:hover, .account-box .btn:focus {border:0;opacity:0.8;}
 .account-box a {font-size: 30px;text-decoration: none; color: #377ba8;}
-.account-box a:hover {color: #ff9b44;}
+.account-box a:hover {color: #000;}
 .account-logo {font-weight: bold; margin-bottom: 40px;text-align: center;}
 .text-center {text-align: center;}
 .field .input{font-family: 'Montserrat','Times New Roman', sans-serif, serif; margin: 0; width:100%;padding: 0.25rem 0;font-weight: bold; font-size: 1rem;border: none;outline: none;background: none;overflow: hidden;}
@@ -18,4 +18,4 @@ body {font-family: 'Montserrat','Times New Roman', sans-serif, serif;font-size: 
 .input:invalid{color: orangered;}
 .switch{color: black;text-align: center;font-size: 1.2rem;}
 .switch a{font-weight: bold; font-size: 1.3rem;text-decoration: none; color: #377ba8;padding-left: 4px;}
-.switch a:hover {color: #ff9b44;}
+.switch a:hover {color: #000;}
