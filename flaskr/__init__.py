@@ -8,7 +8,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='df62557026976cf4afd91d17dffe277b22385b89d40900468e4f440e46d26e42',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        DATABASE_URL=os.path.join(app.instance_path, 'flaskr.sqlite'),
     )
 
     if test_config is None:
