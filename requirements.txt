@@ -2,7 +2,6 @@ atomicwrites==1.4.0
 attrs==21.4.0
 click==8.0.1
 colorama==0.4.4
-coverage==6.2
 Flask==2.0.1
 Flask-SQLAlchemy==2.5.1
 greenlet==1.1.1
@@ -13,13 +12,10 @@ Jinja2==3.0.1
 MarkupSafe==2.0.1
 packaging==21.3
 pluggy==1.0.0
-portalocker==2.3.2
 py==1.11.0
 pyparsing==3.0.6
-pytest==6.2.5
 python-dateutil==2.8.1
 pytz==2021.1
-pywin32==303
 six==1.15.0
 SQLAlchemy==1.4.25
 toml==0.10.2
