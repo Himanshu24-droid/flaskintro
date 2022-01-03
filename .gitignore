@@ -1,9 +1,6 @@
-MANIFEST.in
-setup.py
 flaskr.egg-info/
 dist/
 build/
 .idea/
 instance/
-venv/
 flaskr/__pycache__/
