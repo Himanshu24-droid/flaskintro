@@ -1,14 +1,17 @@
 import os
 
+from pathlib import Path
 from flask import Flask
 
+basedir = Path(__file__).resolve().parent
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='df62557026976cf4afd91d17dffe277b22385b89d40900468e4f440e46d26e42',
-        DATABASE_URL=os.path.join(app.instance_path, 'postgres://bxbrsvzalhluop:a983f9e5ccd65456c515adaeda2d44f437c427508b5339709cedcf4ce3abf267@ec2-54-236-156-167.compute-1.amazonaws.com:5432/db0j4u8u8tarbl'),
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+        SQALCHEMY_DATABASE_URI=os.getenv("DATABASE_URL", f"sqlite:///{Path(basedir).joinpath(os.path.join(app.instance_path, 'flaskr.sqlite'))}")
     )
 
     if test_config is None:
