@@ -21,3 +21,4 @@ toml==0.10.2
 waitress==2.0.0
 Werkzeug==2.0.1
 psycopg==3.0.7
+psycopg2==2.9.3

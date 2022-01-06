@@ -5,4 +5,3 @@ build/
 instance/
 flaskr/__pycache__/
 venv/
-*.pyc
