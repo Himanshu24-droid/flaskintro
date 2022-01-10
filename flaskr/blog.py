@@ -1,10 +1,11 @@
 from flask import(
-    Blueprint,url_for,render_template,flash,g,redirect,request,g,sqlite3
+    Blueprint,url_for,render_template,flash,g,redirect,request,g
 )
 from werkzeug.exceptions import abort
 
 from flaskr.auth import login_required
 from flaskr.db import get_db
+import sqlite3
 
 bp=Blueprint('blog', __name__)
 
