@@ -26,7 +26,7 @@ def index():
     except sqlite3.OperationalError:
         flash('You have no database.')
 
-    return render_template('blog/index.html', posts=posts,comments=comments)
+    return render_template('blog/index.html')#, posts=posts,comments=comments)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
