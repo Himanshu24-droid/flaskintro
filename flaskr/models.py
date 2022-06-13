@@ -2,13 +2,6 @@ from .extensions import db
 from datetime import datetime
 from flask_login import UserMixin
 
-'''user_posts = db.Table('user_posts',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id')))
-
-post_comments = db.Table('post_comments',
-    db.Column('user_name', db.String(50), db.ForeignKey('post.author')),
-    db.Column('post_id', db.Integer, db.ForeignKey('post.id')))'''
 
 class User(UserMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +21,6 @@ class Post(db.Model):
     created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    #associate = db.relationship('Association',back_populates='post')
     comments = db.relationship('Comment', backref='post', lazy=True)
 
     def __repr__(self):
@@ -43,14 +35,4 @@ class Comment(db.Model):
 
     def __repr__(self):
         return '<Comment %r>' % self.comment
-
-'''class Association(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_name = db.Column(db.String(50), db.ForeignKey('user.username'), nullable=False)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=False)
-
-    user = db.relationship('User', back_populates='associate')
-    post = db.relationship('Post', back_populates='associate')
-    comment = db.relationship('Comment')'''
 
