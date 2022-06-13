@@ -2,6 +2,8 @@ flaskr.egg-info/
 dist/
 build/
 .idea/
-instance/
+flaskr.sqlite
+config.py
+.flaskenv
 flaskr/__pycache__/
 venv/

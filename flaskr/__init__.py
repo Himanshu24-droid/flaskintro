@@ -1,30 +1,21 @@
 import os
-
-from pathlib import Path
+from flask_migrate import Migrate
 from flask import Flask
+from .extensions import db, login_manager
+from .models import User
 
-basedir = Path(__file__).resolve().parent
+def create_app(config_file='config.py'):
+    app = Flask(__name__)
+    app.config.from_pyfile(config_file)
 
-def create_app(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-        SQLALCHEMY_DATABASE_URI=os.getenv("DATABASE_URL", f"sqlite:///{Path(basedir).joinpath(os.path.join(app.instance_path, 'flaskr.sqlite'))}")
-    )
+    migrate = Migrate(app,db)
 
-    if test_config is None:
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        app.config.from_mapping(test_config)
-
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
-    from . import db
     db.init_app(app)
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     from . import auth
     app.register_blueprint(auth.bp)
@@ -32,5 +23,8 @@ def create_app(test_config=None):
     from . import blog
     app.register_blueprint(blog.bp)
     app.add_url_rule('/', endpoint='index')
+
+    from .db import create_tables
+    app.cli.add_command(create_tables)
 
     return app

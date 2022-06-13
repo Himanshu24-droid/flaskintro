@@ -1,28 +1,18 @@
 from flask import(
-    Blueprint,url_for,render_template,flash,g,redirect,request,g
+    Blueprint,url_for,render_template,flash,redirect,request
 )
 from werkzeug.exceptions import abort
+from flask_login import current_user, login_required
 
-from flaskr.auth import login_required
-from flaskr.db import get_db
-import sqlite3
+from .extensions import db
+from .models import User, Post, Comment
 
 bp=Blueprint('blog', __name__)
 
 @bp.route('/')
 def index():
-    db=get_db()
-    posts=db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
-    ).fetchall()
-    comments=db.execute(
-        'SELECT c.id, comment, created, user_name, post_id '
-        ' FROM comment c JOIN user u ON c.user_name = u.username'
-        ' ORDER BY created ASC'
-    ).fetchall()
-
+    posts = Post.query.all()
+    comments = Comment.query.all()
     return render_template('blog/index.html', posts=posts,comments=comments)
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -39,36 +29,16 @@ def create():
         if error is not None:
             flash(error)
         else:
-            db=get_db()
-            db.execute(
-                'INSERT INTO post (title,body,author_id)'
-                'VALUES (?,?,?)',
-                (title,body,g.user['id']),
-            )
-            db.commit()
+            post = Post(title=title,body=body,author=current_user)
+            db.session.add(post)
+            db.session.commit()
             return redirect(url_for('blog.index'))
     return render_template('blog/create.html')
-
-def get_post(id, check_author=True):
-    post=get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
-        (id,),
-    ).fetchone()
-
-    if post is None:
-        abort(404, f"Post id {id} doesn't exist.")
-
-    if check_author and post['author_id'] != g.user['id']:
-        abort(403)
-
-    return post
 
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
-    post=get_post(id)
+    post=Post.query.get_or_404(id)
     if request.method=='POST':
         title=request.form['title']
         body=request.form['body']
@@ -80,34 +50,24 @@ def update(id):
         if error is not None:
             flash(error)
         else:
-            db=get_db()
-            db.execute(
-                'UPDATE post SET title = ?, body = ?'
-                ' WHERE id=?',
-                (title,body,id),
-            )
-            db.commit()
+            post.title = title
+            post.body = body
+            db.session.commit()
             return redirect(url_for('blog.index'))
     return render_template('blog/update.html', post=post)
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    get_post(id)
-    db=get_db()
-    db.execute('DELETE FROM post WHERE id=?',(id,))
-    db.commit()
+    post = Post.query.get_or_404(id)
+    db.session.delete(post)
+    db.session.commit()
     return redirect(url_for('blog.index'))
 
 @bp.route('/<int:id>/comment', methods=('GET','POST'))
 @login_required
 def comment(id):
-    post=get_db().execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' WHERE p.id = ?',
-        (id,),
-    ).fetchone()
+    p = Post.query.get_or_404(id)
     if request.method=='POST':
         comment=request.form['comment']
         error=None
@@ -118,26 +78,16 @@ def comment(id):
         if error is not None:
             flash(error)
         else:
-            db=get_db()
-            db.execute(
-                'INSERT INTO comment (comment,user_name,post_id)'
-                'VALUES (?,?,?)',
-                (comment,g.user['username'],post['id'],),
-            )
-            db.commit()
+            cmnt = Comment(comment=comment,user_name=current_user.username,post=p)
+            db.session.add(cmnt)
+            db.session.commit()
             return redirect(url_for('blog.index'))
     return render_template('blog/comment.html')
 
 @bp.route('/<int:id>/delete_comment', methods=('POST',))
 @login_required
 def delete_comment(id):
-    db=get_db()
-    comment=db.execute(
-        'SELECT c.id, comment, created, user_name, post_id '
-        ' FROM comment c JOIN user u ON c.user_name = u.username'
-        ' WHERE c.id = ?',
-        (id,),
-    ).fetchone()
-    db.execute('DELETE FROM comment WHERE id=?',(id,))
-    db.commit()
+    comment = Comment.query.get_or_404(id)
+    db.session.delete(comment)
+    db.session.commit()
     return redirect(url_for('blog.index'))
