@@ -3,7 +3,6 @@ dist/
 build/
 .idea/
 flaskr.sqlite
-config.py
 .flaskenv
 flaskr/__pycache__/
 venv/
