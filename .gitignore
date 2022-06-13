@@ -7,3 +7,4 @@ config.py
 .flaskenv
 flaskr/__pycache__/
 venv/
+.env
