@@ -20,6 +20,7 @@ SQLAlchemy==1.4.25
 toml==0.10.2
 waitress==2.0.0
 Werkzeug==2.0.1
-psycopg==3.0.7
 psycopg2==2.9.3
 python-dotenv==0.20.0
+Flask-Migrate==3.1.0
+Flask-Login==0.5.0
